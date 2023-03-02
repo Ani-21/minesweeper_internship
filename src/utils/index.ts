@@ -35,33 +35,67 @@ export const createField = (): Cell[][] => {
       bombsPlaced++;
     }
   }
+  for (let rowIndex = 0; rowIndex < MAX_ROWS; rowIndex++) {
+    for (let colIndex = 0; colIndex < MAX_COLS; colIndex++) {
+      const currentCell = cells[rowIndex][colIndex];
+      if (currentCell.value === CellValue.bomb) {
+        continue;
+      }
 
-  const inc = (x: number, y: number) => {
-    if (x >= 0 && x < MAX_COLS && y >= 0 && y < MAX_ROWS) {
-      if (cells[y][x].value === CellValue.bomb) return;
+      let numberOfBombs = 0;
+      const topLeftBomb =
+        rowIndex > 0 && colIndex > 0 ? cells[rowIndex - 1][colIndex - 1] : null;
+      const topBomb = rowIndex > 0 ? cells[rowIndex - 1][colIndex] : null;
+      const topRightBomb =
+        rowIndex > 0 && colIndex < MAX_COLS - 1
+          ? cells[rowIndex - 1][colIndex + 1]
+          : null;
+      const leftBomb = colIndex > 0 ? cells[rowIndex][colIndex - 1] : null;
+      const rightBomb =
+        colIndex < MAX_COLS - 1 ? cells[rowIndex][colIndex + 1] : null;
+      const bottomLeftBomb =
+        rowIndex < MAX_ROWS - 1 && colIndex > 0
+          ? cells[rowIndex + 1][colIndex - 1]
+          : null;
+      const bottomBomb =
+        rowIndex < MAX_ROWS - 1 ? cells[rowIndex + 1][colIndex] : null;
+      const bottomRightBomb =
+        rowIndex < MAX_ROWS - 1 && colIndex < MAX_COLS - 1
+          ? cells[rowIndex + 1][colIndex + 1]
+          : null;
 
-      cells[y][x].value += 1;
+      if (topLeftBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (topBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (topRightBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (leftBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (rightBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (bottomLeftBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (bottomBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+      if (bottomRightBomb?.value === CellValue.bomb) {
+        numberOfBombs++;
+      }
+
+      if (numberOfBombs > 0) {
+        cells[rowIndex][colIndex] = {
+          ...currentCell,
+          value: numberOfBombs,
+        };
+      }
     }
-  };
-
-  for (let i = 0; i < MAX_ROWS; ) {
-    const x = Math.floor(Math.random() * MAX_ROWS);
-    const y = Math.floor(Math.random() * MAX_ROWS);
-
-    if (cells[y][x].value === CellValue.bomb) continue;
-
-    cells[y][x].value = CellValue.bomb;
-
-    i += 1;
-    inc(x + 1, y);
-    inc(x - 1, y);
-    inc(x, y + 1);
-    inc(x, y - 1);
-    inc(x + 1, y - 1);
-    inc(x - 1, y - 1);
-    inc(x + 1, y + 1);
-    inc(x - 1, y + 1);
   }
-
   return cells;
 };
