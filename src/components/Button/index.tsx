@@ -20,6 +20,7 @@ export const Button: FC<ButtonProps> = ({ row, col, state, value }) => {
           </span>
         );
       }
+      return value;
     } else if (state === CellState.flagged) {
       <span role="img" aria-label="flag">
         🚩

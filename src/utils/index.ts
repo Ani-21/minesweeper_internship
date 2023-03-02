@@ -36,5 +36,32 @@ export const createField = (): Cell[][] => {
     }
   }
 
+  const inc = (x: number, y: number) => {
+    if (x >= 0 && x < MAX_COLS && y >= 0 && y < MAX_ROWS) {
+      if (cells[y][x].value === CellValue.bomb) return;
+
+      cells[y][x].value += 1;
+    }
+  };
+
+  for (let i = 0; i < MAX_ROWS; ) {
+    const x = Math.floor(Math.random() * MAX_ROWS);
+    const y = Math.floor(Math.random() * MAX_ROWS);
+
+    if (cells[y][x].value === CellValue.bomb) continue;
+
+    cells[y][x].value = CellValue.bomb;
+
+    i += 1;
+    inc(x + 1, y);
+    inc(x - 1, y);
+    inc(x, y + 1);
+    inc(x, y - 1);
+    inc(x + 1, y - 1);
+    inc(x - 1, y - 1);
+    inc(x + 1, y + 1);
+    inc(x - 1, y + 1);
+  }
+
   return cells;
 };
