@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, FC, ReactNode } from "react";
+
 import { TimeDisplay } from "./components/TimeDisplay";
+import { Button } from "./components/Button";
+
+import { createField } from "./utils";
 
 import "./App.scss";
 
-function App() {
+const App: FC = () => {
+  const [field, setField] = useState(createField());
+  console.log(field);
+
+  const renderCells = (): ReactNode => {
+    return field.map((row, rowIndex) =>
+      row.map((cell, cellIndex) => <Button key={`${rowIndex}-${cellIndex}`} />)
+    );
+  };
   return (
     <div className="App">
       <div className="Header">
@@ -15,9 +27,9 @@ function App() {
         </div>
         <TimeDisplay value={10} />
       </div>
-      <div className="Body">Body</div>
+      <div className="Body">{renderCells()}</div>
     </div>
   );
-}
+};
 
 export default App;
