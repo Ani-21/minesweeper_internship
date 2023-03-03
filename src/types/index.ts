@@ -15,6 +15,7 @@ export enum CellState {
   open,
   visible,
   flagged,
+  questioned,
 }
 
 export type Cell = {
