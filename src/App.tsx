@@ -1,11 +1,11 @@
 import { useState, useEffect, FC, ReactNode } from "react";
 
-import { TimeDisplay } from "./components/TimeDisplay";
+import { TimeDisplay } from "./components/NumberDisplay";
 import { Button } from "./components/Button";
 
-import { createField } from "./utils";
+import { createField, unwrapCells } from "./utils";
 
-import { Cell, CellState, Face } from "./types";
+import { Cell, CellState, CellValue, Face } from "./types";
 
 import "./App.scss";
 
@@ -49,6 +49,20 @@ const App: FC = () => {
   const handleCellClick = (rowParam: number, colParam: number): void => {
     if (!isGameRunning) {
       setIsGameRunning(true);
+    }
+
+    const currentCell = field[rowParam][colParam];
+    let visibleField = field.slice();
+
+    if ([CellState.flagged, CellState.visible].includes(currentCell.state))
+      return;
+
+    if (currentCell.value === CellValue.bomb) {
+    } else if (currentCell.value === CellValue.none) {
+      visibleField = unwrapCells(visibleField, rowParam, colParam);
+    } else {
+      visibleField[rowParam][colParam].state = CellState.visible;
+      setField(visibleField);
     }
   };
 
