@@ -8,6 +8,7 @@ interface ButtonProps {
   col: number;
   state: CellState;
   value: CellValue;
+  red?: boolean;
   handleCellClick(rowParam: number, colParam: number): void;
   handleCellContextClick(
     rowParam: number,
@@ -20,6 +21,7 @@ export const Button: FC<ButtonProps> = ({
   col,
   state,
   value,
+  red,
   handleCellClick,
   handleCellContextClick,
 }) => {
@@ -48,7 +50,6 @@ export const Button: FC<ButtonProps> = ({
         </span>
       );
     }
-
     return null;
   };
 
@@ -56,7 +57,7 @@ export const Button: FC<ButtonProps> = ({
     <div
       className={`Button ${
         state === CellState.visible ? "visible" : ""
-      } value-${value} `}
+      } value-${value} ${red ? "red" : ""} `}
       onClick={() => handleCellClick(row, col)}
       onContextMenu={handleCellContextClick(row, col)}
     >

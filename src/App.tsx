@@ -8,13 +8,17 @@ import { createField, unwrapCells } from "./utils";
 import { Cell, CellState, CellValue, Face } from "./types";
 
 import "./App.scss";
+import { current } from "@reduxjs/toolkit";
+import { MAX_COLS, MAX_ROWS } from "./constants";
 
 const App: FC = () => {
   const [field, setField] = useState<Cell[][]>(createField());
   const [face, setFace] = useState<Face>(Face.smile);
-  const [time, setTime] = useState(0);
-  const [isGameRunning, setIsGameRunning] = useState(false);
+  const [time, setTime] = useState<number>(0);
   const [bombCounter, setBombCounter] = useState<number>(10);
+  const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [isGameWon, setIsGameWon] = useState<boolean>(false);
 
   useEffect(() => {
     const handleKeydown = () => {
@@ -46,32 +50,91 @@ const App: FC = () => {
     }
   }, [isGameRunning, time]);
 
+  useEffect(() => {
+    if (isGameOver) {
+      setIsGameRunning(false);
+      setFace(Face.lost);
+    }
+  }, [isGameOver]);
+
+  useEffect(() => {
+    if (isGameWon) {
+      setIsGameRunning(false);
+      setFace(Face.won);
+    }
+  }, [isGameWon]);
+
   const handleCellClick = (rowParam: number, colParam: number): void => {
+    let visibleField = field.slice();
+
     if (!isGameRunning) {
+      while (field[rowParam][colParam].value === CellValue.bomb) {
+        console.log("hit a bomb", field[rowParam][colParam]);
+        visibleField = createField();
+        field[rowParam][colParam] = visibleField[rowParam][colParam];
+      }
       setIsGameRunning(true);
     }
 
     const currentCell = field[rowParam][colParam];
-    let visibleField = field.slice();
 
     if ([CellState.flagged, CellState.visible].includes(currentCell.state))
       return;
 
     if (currentCell.value === CellValue.bomb) {
+      setIsGameOver(true);
+      visibleField[rowParam][colParam].red = true;
+      visibleField = showAllBombs();
+      setField(visibleField);
+      return;
     } else if (currentCell.value === CellValue.none) {
       visibleField = unwrapCells(visibleField, rowParam, colParam);
     } else {
       visibleField[rowParam][colParam].state = CellState.visible;
       setField(visibleField);
     }
+
+    let safeCellOpened = false;
+
+    for (let row = 0; row < MAX_ROWS; row++) {
+      for (let col = 0; col < MAX_COLS; col++) {
+        const currentCell = field[row][col];
+
+        if (
+          currentCell.value !== CellValue.bomb &&
+          currentCell.state === CellState.open
+        ) {
+          safeCellOpened = true;
+          break;
+        }
+      }
+    }
+
+    if (!safeCellOpened) {
+      visibleField = visibleField.map((row) =>
+        row.map((cell) => {
+          if (cell.value === CellValue.bomb) {
+            return {
+              ...cell,
+              state: CellState.flagged,
+            };
+          }
+          return cell;
+        })
+      );
+      setIsGameWon(true);
+    }
+
+    setField(visibleField);
   };
 
   const handleFaceClick = (): void => {
-    if (isGameRunning) {
-      setIsGameRunning(false);
-      setTime(0);
-      setField(createField());
-    }
+    setIsGameRunning(false);
+    setIsGameOver(false);
+    setIsGameWon(false);
+    setTime(0);
+    setBombCounter(10);
+    setField(createField());
   };
 
   const handleCellContextClick =
@@ -97,6 +160,21 @@ const App: FC = () => {
       }
     };
 
+  const showAllBombs = (): Cell[][] => {
+    const currentField = field.slice();
+    return currentField.map((row) =>
+      row.map((cell) => {
+        if (cell.value === CellValue.bomb) {
+          return {
+            ...cell,
+            state: CellState.visible,
+          };
+        }
+        return cell;
+      })
+    );
+  };
+
   const renderCells = (): ReactNode => {
     return field.map((row, rowIndex) =>
       row.map((cell, colIndex) => (
@@ -106,6 +184,7 @@ const App: FC = () => {
           col={colIndex}
           state={cell.state}
           value={cell.value}
+          red={cell.red}
           handleCellClick={handleCellClick}
           handleCellContextClick={handleCellContextClick}
         />
