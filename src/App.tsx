@@ -15,7 +15,7 @@ const App: FC = () => {
   const [field, setField] = useState<Cell[][]>(createField());
   const [face, setFace] = useState<Face>(Face.smile);
   const [time, setTime] = useState<number>(0);
-  const [bombCounter, setBombCounter] = useState<number>(10);
+  const [bombCounter, setBombCounter] = useState<number>(40);
   const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [isGameWon, setIsGameWon] = useState<boolean>(false);
@@ -133,7 +133,7 @@ const App: FC = () => {
     setIsGameOver(false);
     setIsGameWon(false);
     setTime(0);
-    setBombCounter(10);
+    setBombCounter(bombCounter);
     setField(createField());
   };
 
@@ -196,10 +196,8 @@ const App: FC = () => {
     <div className="App">
       <div className="Header">
         <TimeDisplay value={bombCounter} />
-        <div className="Head" onClick={handleFaceClick}>
-          <span role="img" aria-label="face">
-            {face}
-          </span>
+        <div className={`Head ${face}`} onClick={handleFaceClick}>
+          <span role="img" aria-label="face"></span>
         </div>
         <TimeDisplay value={time} />
       </div>

@@ -26,30 +26,8 @@ export const Button: FC<ButtonProps> = ({
   handleCellContextClick,
 }) => {
   const renderContent = (): ReactNode => {
-    if (state === CellState.visible) {
-      if (value === CellValue.bomb) {
-        return (
-          <span role="img" aria-label="bomb">
-            💣
-          </span>
-        );
-      } else if (value === CellValue.none) {
-        return null;
-      }
-      return value;
-    } else if (state === CellState.flagged) {
-      return (
-        <span role="img" aria-label="flag">
-          🚩
-        </span>
-      );
-    } else if (state === CellState.questioned) {
-      return (
-        <span role="img" aria-label="flag">
-          ?
-        </span>
-      );
-    }
+    if (state === CellState.visible) return;
+
     return null;
   };
 

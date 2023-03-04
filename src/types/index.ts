@@ -25,8 +25,8 @@ export type Cell = {
 };
 
 export enum Face {
-  smile = "😁",
-  surprised = "😳",
-  lost = "😩",
-  won = "🤑",
+  smile = "smile",
+  surprised = "surprised",
+  lost = "lost",
+  won = "won",
 }

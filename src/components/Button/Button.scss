@@ -1,51 +1,50 @@
-@import "../../styles/index.scss";
-
 .Button {
-  @include borders;
-  @include buttons;
   align-items: center;
   display: flex;
-  font-weight: bold;
-  height: 30px;
   justify-content: center;
-  width: 30px;
+  background: url("../../assets/minesweeper-sprites.png");
+  background-position: 0 -51px;
+  width: 16px;
+  height: 16px;
 
   &.visible {
-    border-color: #7b7b7b;
-    border-width: 1px;
+    background-position: -17px -51px;
   }
 
   &.red {
-    background: red;
+    background-position: -102px -51px;
   }
 
-  span {
-    font-size: 12px;
-    margin-left: 2px;
-  }
+  // span {
+  //   font-size: 12px;
+  //   margin-left: 2px;
+  // }
 
   &.value-1 {
-    color: blue;
+    background-position: 0 -68px;
   }
   &.value-2 {
-    color: green;
+    background-position: -17px -68px;
   }
   &.value-3 {
-    color: red;
+    background-position: -34px -68px;
   }
   &.value-4 {
-    color: purple;
+    background-position: -51px -68px;
   }
   &.value-5 {
-    color: maroon;
+    background-position: -68px -68px;
   }
   &.value-6 {
-    color: turquoise;
+    background-position: -85px -68px;
   }
   &.value-7 {
-    color: black;
+    background-position: -102px -68px;
   }
   &.value-8 {
-    color: gray;
+    background-position: -119px -68px;
+  }
+  &.value-9 {
+    background-position: -85px -51px;
   }
 }
