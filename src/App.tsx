@@ -160,16 +160,13 @@ const App: FC = () => {
         currentFieldCopy[rowParam][colParam].state = CellState.flagged;
         setField(currentFieldCopy);
         setBombCounter(bombCounter - 1);
-        console.log("flagged");
       } else if (currentCell.state === CellState.flagged) {
         currentFieldCopy[rowParam][colParam].state = CellState.questioned;
         setField(currentFieldCopy);
         setBombCounter(bombCounter + 1);
-        console.log("questioned");
       } else if (currentCell.state === CellState.questioned) {
         currentFieldCopy[rowParam][colParam].state = CellState.open;
         setField(currentFieldCopy);
-        console.log("back");
       }
     };
 
