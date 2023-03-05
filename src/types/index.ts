@@ -15,18 +15,19 @@ export enum CellState {
   open,
   visible,
   flagged,
+  wrong,
   questioned,
 }
 
 export type Cell = {
-  red?: boolean;
   value: CellValue;
   state: CellState;
+  red?: boolean;
 };
 
 export enum Face {
-  smile = "😁",
-  surprised = "😳",
-  lost = "😩",
-  won = "🤑",
+  smile = "smile",
+  surprised = "surprised",
+  lost = "lost",
+  won = "won",
 }

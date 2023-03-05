@@ -21,7 +21,7 @@
   justify-content: space-between;
   align-items: center;
   background: #c0c0c0;
-  padding: 10px 12px;
+  padding: 5px 6px;
 }
 
 .Body {
@@ -35,10 +35,28 @@
 .Head {
   @include borders;
   @include buttons;
+
+  align-items: center;
   display: flex;
-  font-size: 35px;
-  height: 52px;
   justify-content: center;
-  width: 52px;
+  height: 24px;
+  width: 24px;
+  background: url("./assets/minesweeper-sprites.png");
   cursor: pointer;
+
+  &.smile {
+    background-position: -1px -25px;
+  }
+
+  &.surprised {
+    background-position: -55px -25px;
+  }
+
+  &.won {
+    background-position: -82px -25px;
+  }
+
+  &.lost {
+    background-position: -109px -26px;
+  }
 }

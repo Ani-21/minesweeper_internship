@@ -1,21 +1,21 @@
-import { useState, useEffect, FC, ReactNode } from "react";
+import { useState, useEffect, FC, ReactNode, MouseEvent } from "react";
 
-import { TimeDisplay } from "./components/NumberDisplay";
-import { Button } from "./components/Button";
+import { BombCounter, Timer, Button } from "./components/index";
 
 import { createField, unwrapCells } from "./utils";
+
+import { MAX_COLS, MAX_ROWS } from "./constants";
 
 import { Cell, CellState, CellValue, Face } from "./types";
 
 import "./App.scss";
-import { current } from "@reduxjs/toolkit";
-import { MAX_COLS, MAX_ROWS } from "./constants";
+import "./components/Button/Button.scss";
 
 const App: FC = () => {
   const [field, setField] = useState<Cell[][]>(createField());
   const [face, setFace] = useState<Face>(Face.smile);
   const [time, setTime] = useState<number>(0);
-  const [bombCounter, setBombCounter] = useState<number>(10);
+  const [bombCounter, setBombCounter] = useState<number>(40);
   const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [isGameWon, setIsGameWon] = useState<boolean>(false);
@@ -51,25 +51,32 @@ const App: FC = () => {
   }, [isGameRunning, time]);
 
   useEffect(() => {
+    const gameArea = document.getElementById("gameArea");
+
+    const handleBlockClick = (e: any) => {
+      e.stopPropagation();
+    };
+
     if (isGameOver) {
       setIsGameRunning(false);
       setFace(Face.lost);
-    }
-  }, [isGameOver]);
-
-  useEffect(() => {
-    if (isGameWon) {
+      gameArea?.addEventListener("click", handleBlockClick);
+    } else if (isGameWon) {
       setIsGameRunning(false);
       setFace(Face.won);
+      gameArea?.addEventListener("click", handleBlockClick);
     }
-  }, [isGameWon]);
+
+    return () => {
+      gameArea?.removeEventListener("click", handleBlockClick);
+    };
+  }, [isGameOver, isGameWon]);
 
   const handleCellClick = (rowParam: number, colParam: number): void => {
     let visibleField = field.slice();
 
     if (!isGameRunning) {
       while (field[rowParam][colParam].value === CellValue.bomb) {
-        console.log("hit a bomb", field[rowParam][colParam]);
         visibleField = createField();
         field[rowParam][colParam] = visibleField[rowParam][colParam];
       }
@@ -133,7 +140,7 @@ const App: FC = () => {
     setIsGameOver(false);
     setIsGameWon(false);
     setTime(0);
-    setBombCounter(10);
+    setBombCounter(40);
     setField(createField());
   };
 
@@ -153,10 +160,16 @@ const App: FC = () => {
         currentFieldCopy[rowParam][colParam].state = CellState.flagged;
         setField(currentFieldCopy);
         setBombCounter(bombCounter - 1);
+        console.log("flagged");
       } else if (currentCell.state === CellState.flagged) {
-        currentFieldCopy[rowParam][colParam].state = CellState.open;
+        currentFieldCopy[rowParam][colParam].state = CellState.questioned;
         setField(currentFieldCopy);
         setBombCounter(bombCounter + 1);
+        console.log("questioned");
+      } else if (currentCell.state === CellState.questioned) {
+        currentFieldCopy[rowParam][colParam].state = CellState.open;
+        setField(currentFieldCopy);
+        console.log("back");
       }
     };
 
@@ -168,6 +181,12 @@ const App: FC = () => {
           return {
             ...cell,
             state: CellState.visible,
+          };
+        }
+        if (cell.state === CellState.flagged) {
+          return {
+            ...cell,
+            state: CellState.wrong,
           };
         }
         return cell;
@@ -195,15 +214,15 @@ const App: FC = () => {
   return (
     <div className="App">
       <div className="Header">
-        <TimeDisplay value={bombCounter} />
-        <div className="Head" onClick={handleFaceClick}>
-          <span role="img" aria-label="face">
-            {face}
-          </span>
+        <BombCounter value={bombCounter} />
+        <div className={`Head ${face}`} onClick={handleFaceClick}>
+          <span role="img" aria-label="face"></span>
         </div>
-        <TimeDisplay value={time} />
+        <Timer value={time} />
       </div>
-      <div className="Body">{renderCells()}</div>
+      <div className="Body" id="gameArea">
+        {renderCells()}
+      </div>
     </div>
   );
 };
