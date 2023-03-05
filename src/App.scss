@@ -21,7 +21,7 @@
   justify-content: space-between;
   align-items: center;
   background: #c0c0c0;
-  padding: 10px 12px;
+  padding: 5px 6px;
 }
 
 .Body {
@@ -52,11 +52,11 @@
     background-position: -55px -25px;
   }
 
-  &.lost {
+  &.won {
     background-position: -82px -25px;
   }
 
-  &.won {
+  &.lost {
     background-position: -109px -26px;
   }
 }

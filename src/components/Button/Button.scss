@@ -7,44 +7,50 @@
   width: 16px;
   height: 16px;
 
+  &.flagged {
+    background-position: -34px -51px;
+  }
+
+  &.wrong {
+    background-position: -119px -51px;
+  }
+
+  &.questioned {
+    background-position: -51px -51px;
+  }
+
   &.visible {
     background-position: -17px -51px;
-  }
 
-  &.red {
-    background-position: -102px -51px;
-  }
-
-  // span {
-  //   font-size: 12px;
-  //   margin-left: 2px;
-  // }
-
-  &.value-1 {
-    background-position: 0 -68px;
-  }
-  &.value-2 {
-    background-position: -17px -68px;
-  }
-  &.value-3 {
-    background-position: -34px -68px;
-  }
-  &.value-4 {
-    background-position: -51px -68px;
-  }
-  &.value-5 {
-    background-position: -68px -68px;
-  }
-  &.value-6 {
-    background-position: -85px -68px;
-  }
-  &.value-7 {
-    background-position: -102px -68px;
-  }
-  &.value-8 {
-    background-position: -119px -68px;
-  }
-  &.value-9 {
-    background-position: -85px -51px;
+    &.value-1 {
+      background-position: 0 -68px;
+    }
+    &.value-2 {
+      background-position: -17px -68px;
+    }
+    &.value-3 {
+      background-position: -34px -68px;
+    }
+    &.value-4 {
+      background-position: -51px -68px;
+    }
+    &.value-5 {
+      background-position: -68px -68px;
+    }
+    &.value-6 {
+      background-position: -85px -68px;
+    }
+    &.value-7 {
+      background-position: -102px -68px;
+    }
+    &.value-8 {
+      background-position: -119px -68px;
+    }
+    &.value-9 {
+      background-position: -85px -51px;
+    }
+    &.red {
+      background-position: -102px -51px;
+    }
   }
 }

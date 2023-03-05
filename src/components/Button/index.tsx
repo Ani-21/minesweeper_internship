@@ -1,4 +1,3 @@
-import { FC, ReactNode, MouseEvent } from "react";
 import { CellState, CellValue } from "../../types";
 
 import "./Button.scss";
@@ -16,7 +15,7 @@ interface ButtonProps {
   ): (...args: any[]) => void;
 }
 
-export const Button: FC<ButtonProps> = ({
+export const Button = ({
   row,
   col,
   state,
@@ -24,22 +23,23 @@ export const Button: FC<ButtonProps> = ({
   red,
   handleCellClick,
   handleCellContextClick,
-}) => {
-  const renderContent = (): ReactNode => {
-    if (state === CellState.visible) return;
-
-    return null;
-  };
-
+}: ButtonProps) => {
   return (
     <div
       className={`Button ${
-        state === CellState.visible ? "visible" : ""
-      } value-${value} ${red ? "red" : ""} `}
+        state === CellState.visible
+          ? "visible"
+          : state === CellState.flagged
+          ? "flagged"
+          : state === CellState.wrong
+          ? "wrong"
+          : state === CellState.questioned
+          ? "questioned"
+          : ""
+      } value-${value} ${red ? "red" : ""}
+      `}
       onClick={() => handleCellClick(row, col)}
       onContextMenu={handleCellContextClick(row, col)}
-    >
-      {renderContent()}
-    </div>
+    />
   );
 };
