@@ -10,7 +10,7 @@ https://minesweeper-ani-21.netlify.app/
 
 yarn run dev
 -----------
-Запускает проект в режиме разработки__ 
+Запускает проект в режиме разработки <br />
 Откройте http://localhost:5173/ для просмотра в браузере
 
 yarn run build 
